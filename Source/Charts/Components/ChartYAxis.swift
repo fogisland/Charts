@@ -189,9 +189,9 @@ public class ChartYAxis: ChartAxisBase
         {
             _labelCount = 25
         }
-        if (_labelCount < 2)
+        if (_labelCount < 1)
         {
-            _labelCount = 2
+            _labelCount = 1
         }
     
         forceLabelsEnabled = force
