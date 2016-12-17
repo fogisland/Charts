@@ -311,21 +311,39 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
             
             var y = (frame.height - textHeight) / 2.0
             
+            let paragraphStyle = NSMutableParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+            paragraphStyle.alignment = .Center
+            let attributes = [NSFontAttributeName: infoFont, NSForegroundColorAttributeName: infoTextColor, NSParagraphStyleAttributeName: paragraphStyle]
+            
             if hasText
             {
-                ChartUtils.drawText(
+                let constrainedToSize = CGSizeMake(frame.size.width - 16, frame.size.height - y)
+                let rect = noDataText.boundingRectWithSize(constrainedToSize, options: .UsesLineFragmentOrigin, attributes: attributes, context: nil)
+                ChartUtils.drawMultilineText(
                     context: context,
                     text: noDataText,
-                    point: CGPoint(x: frame.width / 2.0, y: y),
-                    align: .Center,
-                    attributes: [NSFontAttributeName: infoFont, NSForegroundColorAttributeName: infoTextColor]
-                )
-                y = y + infoFont.lineHeight
+                    knownTextSize: rect.size,
+                    point: CGPointMake((frame.size.width/2.0) - (rect.width/2.0), y - (rect.height/2.0)),
+                    attributes: attributes,
+                    constrainedToSize: constrainedToSize,
+                    anchor: CGPointZero,
+                    angleRadians: 0)
+                    y += rect.height
             }
             
             if (noDataTextDescription != nil && (noDataTextDescription!).characters.count > 0)
             {
-                ChartUtils.drawText(context: context, text: noDataTextDescription!, point: CGPoint(x: frame.width / 2.0, y: y), align: .Center, attributes: [NSFontAttributeName: infoFont, NSForegroundColorAttributeName: infoTextColor])
+                let constrainedToSize = CGSizeMake(frame.size.width - 16, frame.size.height - y)
+                let rect = noDataTextDescription!.boundingRectWithSize(constrainedToSize, options: .UsesLineFragmentOrigin, attributes: attributes, context: nil)
+                ChartUtils.drawMultilineText(
+                        context: context,
+                        text: noDataTextDescription!,
+                        knownTextSize: rect.size,
+                        point: CGPointMake((frame.size.width/2.0) - (rect.width/2.0), y),
+                        attributes: attributes,
+                        constrainedToSize: constrainedToSize,
+                        anchor: CGPointZero,
+                        angleRadians: 0)
             }
             
             return
