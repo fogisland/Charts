@@ -537,6 +537,8 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         
         getTransformer(data.getDataSetByIndex(dataSetIndex)!.axisDependency).pointValueToPixel(&pt)
         
+        pt.y = pt.y - 2
+        
         return pt
     }
     
