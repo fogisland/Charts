@@ -687,8 +687,16 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                 {
                     if _outerScrollView !== nil
                     {
-                        // Prevent the parent scroll view from scrolling
-                        _outerScrollView?.nsuiIsScrollEnabled = false
+                        let v = recognizer.velocity(in: self)
+                        if abs(v.y) / abs(v.x) > 1 {
+                            // y 方向速度为主时，交由外部滑动处理，内部不滑动
+                            _outerScrollView?.isScrollEnabled = true
+                            _outerScrollView = nil
+                            _isDragging = false
+                        } else {
+                            // Prevent the parent scroll view from scrolling
+                            _outerScrollView?.isScrollEnabled = false
+                        }
                     }
                 }
                 
